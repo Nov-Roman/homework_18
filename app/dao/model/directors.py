@@ -1,10 +1,9 @@
-from marshmallow import fields, Schema
+from marshmallow import Schema, fields
+from app.setup_db import db
 
-from dao.setup_db import db
 
-
-class Genre(db.Model):
-    __tablename__ = 'genre'
+class Director(db.Model):
+    __tablename__ = 'director'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
 
@@ -12,6 +11,6 @@ class Genre(db.Model):
         return self.name
 
 
-class GenreSchema(Schema):
+class DirectorSchema(Schema):
     id = fields.Int()
     name = fields.Str()

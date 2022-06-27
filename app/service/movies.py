@@ -1,18 +1,21 @@
-from dao.movies import MoviesDAO
+from app.dao.movies import MoviesDAO
 
 
 class MoviesService:
     def __init__(self, dao: MoviesDAO):
         self.dao = dao
 
-    def get_movies(self, mid=None, **kwargs):
-        return self.dao.get(mid, **kwargs)
+    def get_one_movie(self, mid):
+        return self.dao.get_movie(mid)
+
+    def get_some_movies(self, **kwargs):
+        return self.dao.get_movies(**kwargs)
 
     def create_movies(self, data):
         return self.dao.create(data)
 
     def full_update(self, movie_id, data):
-        movie = self.get_movies(movie_id)
+        movie = self.get_one_movie(movie_id)
 
         movie.title = data['title']
         movie.description = data['description']
@@ -25,7 +28,7 @@ class MoviesService:
         return movie
 
     def partial_update(self, movie_id, data):
-        movie = self.get_movies(movie_id)
+        movie = self.get_one_movie(movie_id)
 
         if 'title' in data:
             movie.title = data["title"]

@@ -1,17 +1,19 @@
-from dao.model.movies import Movie
+from app.dao.model.movies import Movie
 
 
 class MoviesDAO:
     def __init__(self, session):
         self.session = session
 
-    def get(self, mid=None, **kwargs):
+    def get_movie(self, mid):
         query = self.session.query(Movie)
-        if mid:
-            return query.get(mid)
-        if kwargs:
-            for key, value in kwargs.items():
-                query = query.filter(eval(f'Movie.{key}') == int(value))
+        return query.get(mid)
+
+    def get_movies(self, **kwargs):
+        query = self.session.query(Movie)
+
+        for key, value in kwargs.items():
+            query = query.filter(getattr(Movie, key) == int(value))
         return query.all()
 
     def create(self, data):
@@ -25,7 +27,7 @@ class MoviesDAO:
         self.session.commit()
 
     def delete(self, mid):
-        movie = self.get(mid)
+        movie = self.get_movie(mid)
         if not movie:
             return
         self.session.delete(movie)

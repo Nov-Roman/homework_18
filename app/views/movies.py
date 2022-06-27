@@ -1,7 +1,7 @@
 from flask import request, make_response
 from flask_restx import Resource, Namespace
-from dao.model.movies import MovieSchema
-from implemented import movie_service
+from app.dao.model.movies import MovieSchema
+from app.implemented import movie_service
 
 movie_ns = Namespace('movies')
 
@@ -11,7 +11,7 @@ class MoviesView(Resource):
     schema = MovieSchema(many=True)
 
     def get(self):
-        movies = self.schema.dump(movie_service.get_movies(**request.args))
+        movies = self.schema.dump(movie_service.get_some_movies(**request.args))
         return movies, 200
 
     def post(self):
@@ -26,7 +26,7 @@ class MovieView(Resource):
     schema = MovieSchema()
 
     def get(self, movie_id: int):
-        return self.schema.dump(movie_service.get_movies(movie_id)), 200
+        return self.schema.dump(movie_service.get_one_movie(movie_id)), 200
 
     def patch(self, movie_id: int):
         return self.schema.dump(movie_service.partial_update(movie_id, request.json)), 200
